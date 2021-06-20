@@ -21,7 +21,7 @@ def fill() -> dict:
         file = open("options.json")
         d = json.load(file)
         file.close()
-    except JSONDecodeError or FileNotFoundError:
+    except FileNotFoundError:
         print("Failed to read options.json...using default settings.")
         d = __DEFAULT_OPTION
     
