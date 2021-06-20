@@ -161,7 +161,6 @@ def menu_loop(screen: pygame.Surface,
                                 menu_state = button_action
                             else:
                                 button_action()
-                                print(OPTION["WINNING_SCORE"])
 
         screen.fill(OPTION["BACKGROUND_COLOR"])
 
