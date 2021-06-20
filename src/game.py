@@ -73,6 +73,7 @@ def pong_loop(screen: pygame.Surface,
     running = True
     while running:
         dt = ms / 1000.0
+        
         # Get user input.
         # NOTE: Currently the window will close when the player hits the A button on their
         # Xbox Controller OR the spacebar on the keyboard. This happens since - when the while
