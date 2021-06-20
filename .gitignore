@@ -4,3 +4,4 @@ __pycache__
 .vscode
 pong/__pycache__
 pong/options.json
+options.json
