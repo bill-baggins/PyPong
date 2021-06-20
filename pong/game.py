@@ -3,12 +3,12 @@ from sys import exit
 from pygame.math import Vector2
 from pygame.constants import *
 
-from common import Color, GameState, XboxButton, MenuState
-from ball import Ball
-from paddle import Paddle
-from net import create_net_texture, draw_net
+from .common import Color, GameState, XboxButton, MenuState
+from .ball import Ball
+from .paddle import Paddle
+from .net import create_net_texture, draw_net
 
-from options import OPTION
+from .options import OPTION
 
 
 def pong_loop(screen: pygame.Surface,

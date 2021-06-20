@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from pygame.constants import *
 
-from common import Color, XboxButton
+from .common import Color, XboxButton
 
 
 class Paddle(object):

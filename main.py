@@ -1,9 +1,9 @@
 import pygame
 from sys import exit
 
-from src.game import pong_loop
-from src.menu import menu_loop
-from src.common import MenuState
+from pong.game import pong_loop
+from pong.menu import menu_loop
+from pong.common import MenuState
 
 
 # The main loop. Contains some pygame boilerplate and also contains two loops:

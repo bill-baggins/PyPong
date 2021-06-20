@@ -1,4 +1,4 @@
-from common import Color
+from .common import Color
 
 OPTION = {
     "WINNING_SCORE": 5,

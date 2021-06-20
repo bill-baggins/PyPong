@@ -1,6 +1,6 @@
 import pygame
-from common import Color
-from options import OPTION
+from .common import Color
+from .options import OPTION
 
 
 def create_net_texture(net_width: int, net_height: int):

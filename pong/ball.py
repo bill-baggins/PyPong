@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 
-from paddle import Paddle
+from .paddle import Paddle
 
 from random import randint, random
 

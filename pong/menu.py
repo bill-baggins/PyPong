@@ -3,8 +3,8 @@ from typing import Union, Callable
 import pygame
 from pygame.constants import *
 
-from common import Color
-from common import MenuState, TextBox
+from .common import Color
+from .common import MenuState, TextBox
 
 
 class Button(TextBox):
@@ -43,7 +43,7 @@ def menu_loop(screen: pygame.Surface,
               clock: pygame.time.Clock,
               fps: int = 60) -> MenuState:
 
-    from options import OPTION
+    from .options import OPTION
 
     # MAIN MENU BUTTONS:
     title_box = TextBox([screen_width // 2 - 100, 10],
