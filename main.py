@@ -1,9 +1,13 @@
 import pygame
+import json
+import os.path
+
 from sys import exit
 
 from pong.game import pong_loop
 from pong.menu import menu_loop
 from pong.common import MenuState
+from pong.options import OPTION
 
 
 # The main loop. Contains some pygame boilerplate and also contains two loops:
@@ -43,6 +47,9 @@ if __name__ == "__main__":
     pygame.font.init()
 
     main_loop(768, 432, "Pong", False, 60)
+
+    with open("options.json", "w+") as f:
+        json.dump(OPTION, f)
 
     pygame.font.quit()
     pygame.quit()

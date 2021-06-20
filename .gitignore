@@ -2,4 +2,5 @@ __pycache__
 .env
 .idea
 .vscode
-src/__pycache__
+pong/__pycache__
+pong/options.json

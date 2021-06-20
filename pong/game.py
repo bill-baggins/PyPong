@@ -5,7 +5,7 @@ from pygame.constants import *
 
 from .common import Color, GameState, XboxButton, MenuState
 from .ball import Ball
-from .paddle import Paddle
+from .paddle import Player
 from .net import create_net_texture, draw_net
 
 from .options import OPTION
@@ -25,8 +25,8 @@ def pong_loop(screen: pygame.Surface,
     if joysticks is None:
         joysticks = [pygame.joystick.Joystick(i) for i in range(pygame.joystick.get_count())]
 
-    player_one = Paddle(Vector2(20, 20), 20.0, 60.0, OPTION["PLAYER1_COLOR"], [K_w, K_s])
-    player_two = Paddle(Vector2(screen_width - 40, 20), 20.0, 60.0, OPTION["PLAYER2_COLOR"], [K_UP, K_DOWN])
+    player_one = Player(Vector2(20, 20), 20.0, 60.0, OPTION["PLAYER1_COLOR"], [K_w, K_s])
+    player_two = Player(Vector2(screen_width - 40, 20), 20.0, 60.0, OPTION["PLAYER2_COLOR"], [K_UP, K_DOWN])
 
     if num_of_players == 1:
         pass
