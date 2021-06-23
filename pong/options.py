@@ -1,8 +1,5 @@
 import json
-import os.path
 from .common import Color
-
-from json import JSONDecodeError
 
 
 __DEFAULT_OPTION = {
@@ -12,8 +9,10 @@ __DEFAULT_OPTION = {
     "PLAYER1_COLOR": Color.Red,
     "PLAYER2_COLOR": Color.Blue,
     "BALL_COLOR": Color.Black,
-    "NUM_OF_PLAYERS": 2
+    "NUM_OF_PLAYERS": 2,
+    "FONT_PATH": "resource/fonts/lunchds.ttf",
 }
+
 
 def fill() -> dict:
     d = None
@@ -27,7 +26,9 @@ def fill() -> dict:
     
     return d or {}
 
+
 OPTION = fill()
 
-if OPTION == {}:
+
+if len(OPTION) != len(__DEFAULT_OPTION) or OPTION == {}:
     OPTION = __DEFAULT_OPTION

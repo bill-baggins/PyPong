@@ -1,22 +1,12 @@
-import pygame
-import json
-import os.path
+# TODO:
+#       1) Add a navigation box to the main menu that can be controlled using the controller
+#       or keyboard.
+#       2) Improve the code structure for fonts. Make each Textbox and Button class work with their
+#       own font objects
 
-from sys import exit
-
-from pong.game import pong_loop
-from pong.menu import menu_loop
-from pong.common import MenuState
-from pong.options import OPTION
-
-
-# The main loop. Contains some pygame boilerplate and also contains two loops:
-# the menu loop and the game loop.
-
-def main_loop(width, height, title, fullscreen=False, fps: int = 60):
+def main_loop(width: int, height: int, title: str, fullscreen: bool = False, fps: int = 60):
     available_resolutions = pygame.display.list_modes()
     clock = pygame.time.Clock()
-    font = pygame.font.Font(pygame.font.get_default_font(), 20)
     size = width, height
     if fullscreen and size not in available_resolutions:
         raise Exception("That resolution is not supported by your monitor.")
@@ -36,21 +26,32 @@ def main_loop(width, height, title, fullscreen=False, fps: int = 60):
     # Main game loop goes here. Will switch between the menu and the game.
     while menu_state != MenuState.Quit:
         if menu_state == MenuState.Menu:
-            menu_state = menu_loop(screen, screen_width, screen_height, font, clock, fps)
+            menu_state = menu_loop(screen, screen_width, screen_height)
         elif menu_state == MenuState.Game:
-            menu_state = pong_loop(screen, screen_width, screen_height, font, clock, fps, joysticks=joysticks)
+            menu_state = pong_loop(screen, screen_width, screen_height, clock, fps, joysticks=joysticks)
 
 
 if __name__ == "__main__":
+    import pygame
+    import json
+    import os.path
+
     pygame.init()
-    pygame.joystick.init()
-    pygame.font.init()
 
-    main_loop(768, 432, "Pong", False, 60)
+    from sys import exit
 
-    with open("options.json", "w+") as f:
+    from pong.game import pong_loop
+    from pong.menu import menu_loop
+    from pong.common import MenuState
+    from pong.options import OPTION
+
+    # The main loop. Contains some pygame boilerplate and also contains two loops:
+    # the menu loop and the game loop.
+
+    main_loop(768, 432, "Pong", False, 75)
+
+    with open(os.path.basename("options.json"), "w+") as f:
         json.dump(OPTION, f)
 
-    pygame.font.quit()
     pygame.quit()
     exit()

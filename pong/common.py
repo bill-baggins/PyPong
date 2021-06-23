@@ -1,4 +1,12 @@
 import pygame
+import pygame.font
+import pygame.surface
+
+
+class GameFont:
+    Default = pygame.font.Font("resource/fonts/lunchds.ttf", 30)
+    Title = pygame.font.Font("resource/fonts/lunchds.ttf", 50)
+    Arrow = pygame.font.Font("resource/fonts/lunchds.ttf", 80)
 
 
 # Color class. Has named attributes of various colors I use often.
@@ -34,12 +42,13 @@ class GameState:
 
 # "Enum" that has values for each of the buttons on an Xbox One controller.
 class XboxButton:
+    val_range = range(0, 6)
     (A,
      X,
      Y,
      B,
      RB,
-     LB) = range(0, 6)
+     LB) = val_range
 
 
 class TextBox(object):
@@ -49,33 +58,31 @@ class TextBox(object):
     centered using its center_text function. A custom text position within the
     TextBox can also be set.
     """
-    def __init__(self, pos: list,
+    def __init__(self,
+                 pos: list,
                  size: list,
                  background_color: list,
                  text: str = "",
-                 text_size: int = 10,
                  text_pos: list = None,
-                 text_color: tuple = Color.Black,
-                 font_family: str = pygame.font.get_default_font()):
-
+                 text_size: int = 20,
+                 text_color: tuple = Color.Black):
+        from .options import OPTION
+        
         self.pos = pos
         self.size = size
         self.background_color = background_color
         self.text = text
-        self.text_size = text_size
         self.text_pos = text_pos or [20, 20]
+        self.text_size = text_size
         self.text_color = text_color
-        self.font_family = font_family
 
-        self.font = pygame.font.Font(font_family, text_size)
-        self.text_render = self.font.render(self.text, False, self.text_color)
+        self.font = pygame.font.Font(OPTION["FONT_PATH"], self.text_size)
+
         self.surf = pygame.Surface(self.size)
         self.rect = self.surf.get_rect(topleft=self.pos)
 
-        self.surf.fill(background_color)
-        self.surf.blit(self.text_render, self.text_pos)
-
-        # Call this so I do not need to call this over and over again...
+        
+        self.__draw_to_self(self.font)
         self.__center_text()
 
     def draw_to(self, screen: pygame.surface.Surface):
@@ -87,6 +94,11 @@ class TextBox(object):
         self.surf.fill([0, 0, 0, 0])
         self.text_pos = new_pos
         self.surf.fill(self.background_color)
+        self.surf.blit(self.text_render, self.text_pos)
+
+    def __draw_to_self(self, font: pygame.font.Font):
+        self.surf.fill(self.background_color)
+        self.text_render = font.render(self.text, False, self.text_color)
         self.surf.blit(self.text_render, self.text_pos)
 
     def __center_text(self):

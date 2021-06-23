@@ -3,7 +3,7 @@ from sys import exit
 from pygame.math import Vector2
 from pygame.constants import *
 
-from .common import Color, GameState, XboxButton, MenuState
+from .common import Color, GameState, XboxButton, MenuState, GameFont
 from .ball import Ball
 from .paddle import Player
 from .net import create_net_texture, draw_net
@@ -14,7 +14,6 @@ from .options import OPTION
 def pong_loop(screen: pygame.Surface,
               screen_width: int,
               screen_height: int,
-              font: pygame.font.Font,
               clock: pygame.time.Clock,
               fps: int = 60,
               joysticks: list = None) -> MenuState:
@@ -52,13 +51,13 @@ def pong_loop(screen: pygame.Surface,
             p.movement_key_dict[XboxButton.RB] = 240
 
     def render_player_score(player: str, player_score: int) -> pygame.Surface:
-        return font.render(f"{player}{player_score}", False, Color.Black)
+        return GameFont.Default.render(f"{player}{player_score}", False, Color.Black)
 
     def render_player_got_point(player_number: str) -> pygame.Surface:
-        return font.render(f"Player {player_number} got the point!", False, Color.Black)
+        return GameFont.Default.render(f"Player {player_number} got the point!", False, Color.Black)
 
     def render_player_won(player_number: str) -> pygame.Surface:
-        return font.render(f"Player {player_number} won the game!", False, Color.Black)
+        return GameFont.Default.render(f"Player {player_number} won the game!", False, Color.Black)
 
     player_one_score_text = render_player_score("", player_one.score)
     player_two_score_text = render_player_score("", player_two.score)
@@ -66,7 +65,7 @@ def pong_loop(screen: pygame.Surface,
     player_two_got_point_text = render_player_got_point("Two")
 
     # TODO: alternate the responsibility of resuming the game between the players.
-    paused_text = font.render("Press the Spacebar or the A button to begin!", False, Color.Black)
+    paused_text = GameFont.Default.render("Press the Spacebar or the A button to begin!", False, Color.Black)
 
     game_state = GameState.Paused
 
@@ -75,12 +74,6 @@ def pong_loop(screen: pygame.Surface,
         dt = ms / 1000.0
         
         # Get user input.
-        # NOTE: Currently the window will close when the player hits the A button on their
-        # Xbox Controller OR the spacebar on the keyboard. This happens since - when the while
-        # loop is terminated - the pong_loop function will return MenuState.Menu. Inside of the
-        # while loop of the main_loop function in main.py, the MenuState is checked to see which
-        # of two functions to run: menu_loop and pong_loop. When it runs menu_loop, it will return
-        # MenuState.Quit and causes the whole application to quit.
         pygame_events = pygame.event.get()
         for event in pygame_events:
             if event.type == QUIT:
@@ -198,9 +191,11 @@ def pong_loop(screen: pygame.Surface,
 
         # Display the "player got point" or winning text for each player.
         if ball.exited_right_border:
-            screen.blit(player_one_got_point_text, [(screen_width / 2) - 100, screen_height / 2])
+            screen.blit(player_one_got_point_text, [(screen_width / 2) - (player_one_got_point_text.get_width() // 2),
+                                                    screen_height / 2])
         elif ball.exited_left_border:
-            screen.blit(player_two_got_point_text, [(screen_width / 2) - 100, screen_height / 2])
+            screen.blit(player_two_got_point_text, [(screen_width / 2) - (player_two_got_point_text.get_width() // 2),
+                                                    screen_height / 2])
 
         # Tick the clock at the set framerate.
         ms = clock.tick(fps)

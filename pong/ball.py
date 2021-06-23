@@ -21,6 +21,8 @@ class Ball(object):
         self.surf = pygame.Surface([ball_radius, ball_radius])
         self.rect = self.surf.get_rect(topleft=self.pos)
 
+        self.bounce_noise = pygame.mixer.Sound("resource/sound/bounce1.wav")
+
     def draw_to(self, screen: pygame.Surface):
         pygame.draw.rect(screen, self.color, self.rect)
 
@@ -31,6 +33,7 @@ class Ball(object):
 
     def check_collision_with_player(self, player: Paddle):
         if self.rect.colliderect(player.rect):
+            self.bounce_noise.play()
             self.rect.x = player.rect.left - self.rect.width if self.speed_x > 0 else player.rect.right
             if self.speed_x < 0:
                 self.speed_x = -self.speed_x + 10
@@ -45,10 +48,12 @@ class Ball(object):
 
     def _check_collision_with_border(self, screen_width: int, screen_height: int):
         if self.rect.top <= 0:
-            self.rect.top = 0
+            self.bounce_noise.play()
+            self.rect.top = 1
             self.speed_y = -self.speed_y
         elif self.rect.bottom >= screen_height:
-            self.rect.bottom = screen_height
+            self.bounce_noise.play()
+            self.rect.bottom = screen_height - 1
             self.speed_y = -self.speed_y * 1.2
 
         if self.rect.x < -10:

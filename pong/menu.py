@@ -14,18 +14,17 @@ class Button(TextBox):
     TextBox class, but with one added function: on_click. When clicked, it return
     the menu_state the button was intended to change.
     """
-    def __init__(self, pos: list,
+    def __init__(self, 
+                 pos: list,
                  size: list,
                  background_color: list,
                  action: object,
                  text: str = "",
-                 text_size: int = 10,
+                 text_size: int = 20,
                  text_pos: list = None,
-                 text_color: tuple = Color.Black,
-                 font_family: str = pygame.font.get_default_font()):
+                 text_color: tuple = Color.Black):
 
-        super().__init__(pos, size, background_color, text, text_size,
-                         text_pos, text_color, font_family)
+        super().__init__(pos, size, background_color, text, text_pos, text_size, text_color)
         self.action = action
 
     # IMPORTANT: this function changes the MenuState. Gotta put this here
@@ -38,19 +37,18 @@ class Button(TextBox):
 
 def menu_loop(screen: pygame.Surface,
               screen_width: int,
-              screen_height: int,
-              font: pygame.font.Font,
-              clock: pygame.time.Clock,
-              fps: int = 60) -> MenuState:
+              screen_height: int) -> MenuState:
 
+    # import OPTION here so it is not undefined
     from .options import OPTION
 
-    # MAIN MENU BUTTONS:
+    # MAIN MENU BUTTONS -----------------------------------------------------------------------------------------------
     title_box = TextBox([screen_width // 2 - 100, 10],
                         [200, 50],
                         OPTION["BACKGROUND_COLOR"],
                         text="Pong!",
-                        text_size=40)
+                        text_size=50,
+                        text_color=Color.White)
 
     start_game = MenuState.Game
     open_options_menu = MenuState.Options
@@ -61,40 +59,42 @@ def menu_loop(screen: pygame.Surface,
                           Color.White,
                           action=start_game,
                           text="Start Game",
-                          text_size=20)
+                          text_size=30)
 
     options_button = Button([screen_width // 2 - 100, title_box.size[1] * 4 + 30],
                             [200, 50],
                             Color.White,
                             action=open_options_menu,
                             text="Options",
-                            text_size=20)
+                            text_size=30)
 
     quit_button = Button([screen_width // 2 - 100, title_box.size[1] * 6 + 30],
                          [200, 50],
                          Color.White,
                          action=quit_game,
                          text="Quit",
-                         text_size=20)
+                         text_size=30)
 
-    # END MAIN MENU BUTTONS
+    # END MAIN MENU BUTTONS -------------------------------------------------------------------------------------------
 
-    # OPTION MENU TEXTBOX(ES):
-    current_winning_score_text_box = TextBox([screen_width // 2 - 100, title_box.size[1] * 4 + 30],
+    # OPTION MENU TEXTBOX(ES) -----------------------------------------------------------------------------------------
+    winning_score_str = f"Max Score:{OPTION['WINNING_SCORE']}"
+    current_winning_score_text_box = TextBox([screen_width // 2 - 100, title_box.size[1] * 4 + 30], 
                                              [200, 50],
-                                             Color.White,
-                                             text=f"Max Score:  {OPTION['WINNING_SCORE']}",
-                                             text_size=20)
+                                             Color.White, 
+                                             text=winning_score_str, 
+                                             text_size=30)
 
-    # END OPTION MENU TEXT BOXES
+    # END OPTION MENU TEXT BOXES --------------------------------------------------------------------------------------
 
-    # OPTION MENU BUTTON ACTIONS AND BUTTONS:
+    # OPTION MENU BUTTON ACTIONS AND BUTTONS --------------------------------------------------------------------------
     return_to_main_menu = MenuState.Menu
 
     def update_winning_score_str():
-        new_score_str = f"Max Score:  {OPTION['WINNING_SCORE']}"
+        new_score_str = f"Max Score:{OPTION['WINNING_SCORE']}"
         current_winning_score_text_box.text = new_score_str
-        current_winning_score_text_box.text_render = font.render(new_score_str, False, Color.Black)
+        current_winning_score_text_box.text_render = \
+                current_winning_score_text_box.font.render(new_score_str, False, Color.Black)
         current_winning_score_text_box.update_text()
 
     def increase_winning_score():
@@ -111,24 +111,24 @@ def menu_loop(screen: pygame.Surface,
                                    [40, 50],
                                    Color.White,
                                    action=increase_winning_score,
-                                   text="->",
-                                   text_size=40)
+                                   text=">",
+                                   text_size=80)
 
     decrease_score_button = Button([screen_width // 2 - 160, title_box.size[1] * 4 + 30],
                                    [40, 50],
                                    Color.White,
                                    action=decrease_winning_score,
-                                   text="<-",
-                                   text_size=40)
+                                   text="<",
+                                   text_size=80)
 
     back_to_main_menu_button = Button([screen_width // 2 - 100, title_box.size[1] * 6 + 30],
                                       [200, 50],
                                       Color.White,
                                       action=return_to_main_menu,
-                                      text="Back to Main Menu",
-                                      text_size=20)
+                                      text="Main Menu",
+                                      text_size=30)
 
-    # END OPTION MENU BUTTONS
+    # END OPTION MENU BUTTONS -----------------------------------------------------------------------------------------
 
     main_menu_buttons = start_button, options_button, quit_button
     option_menu_buttons = increase_score_button, decrease_score_button, back_to_main_menu_button,
