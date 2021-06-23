@@ -83,7 +83,7 @@ def menu_loop(screen: pygame.Surface,
                                              [200, 50],
                                              Color.White, 
                                              text=winning_score_str, 
-                                             text_size=30)
+                                             text_size=25)
 
     # END OPTION MENU TEXT BOXES --------------------------------------------------------------------------------------
 
