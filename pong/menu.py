@@ -1,38 +1,9 @@
-from typing import Union, Callable
-
 import pygame
+
 from pygame.constants import *
 
-from .common import Color
-from .common import MenuState, TextBox
-
-
-class Button(TextBox):
-    """
-    This is my Button class. It is another GUI object that inherits from the
-    TextBox class. The button class contains all the same attributes as the
-    TextBox class, but with one added function: on_click. When clicked, it return
-    the menu_state the button was intended to change.
-    """
-    def __init__(self, 
-                 pos: list,
-                 size: list,
-                 background_color: list,
-                 action: object,
-                 text: str = "",
-                 text_size: int = 20,
-                 text_pos: list = None,
-                 text_color: tuple = Color.Black):
-
-        super().__init__(pos, size, background_color, text, text_pos, text_size, text_color)
-        self.action = action
-
-    # IMPORTANT: this function changes the MenuState. Gotta put this here
-    # so i don't confuse myself later if something breaks because of this.
-    def on_click(self, mouse_pos: tuple) -> Union[Callable, object]:
-        if (self.rect.left < mouse_pos[0] < self.rect.right and
-                self.rect.top < mouse_pos[1] < self.rect.bottom):
-            return self.action
+from .common import Color, TextBox, Button
+from .myenums import MenuState
 
 
 def menu_loop(screen: pygame.Surface,
@@ -90,22 +61,42 @@ def menu_loop(screen: pygame.Surface,
     # OPTION MENU BUTTON ACTIONS AND BUTTONS --------------------------------------------------------------------------
     return_to_main_menu = MenuState.Menu
 
-    def update_winning_score_str():
+    def update_winning_score_str() -> None:
         new_score_str = f"Max Score:{OPTION['WINNING_SCORE']}"
         current_winning_score_text_box.text = new_score_str
         current_winning_score_text_box.text_render = \
-                current_winning_score_text_box.font.render(new_score_str, False, Color.Black)
+            current_winning_score_text_box.font.render(new_score_str, False, current_winning_score_text_box.text_color)
         current_winning_score_text_box.update_text()
 
-    def increase_winning_score():
+    def increase_winning_score() -> None:
         if OPTION["WINNING_SCORE"] < 15:
             OPTION["WINNING_SCORE"] += 1
             update_winning_score_str()
 
-    def decrease_winning_score():
+    def decrease_winning_score() -> None:
         if OPTION["WINNING_SCORE"] > 1:
             OPTION["WINNING_SCORE"] -= 1
             update_winning_score_str()
+
+
+    player_count_button = Button([screen_width // 2 - 100, title_box.size[1] * 2 + 30],
+                                 [200, 50],
+                                 Color.White,
+                                 action=None,
+                                 text=f"Players: {OPTION['PLAYER_COUNT']}",
+                                 text_size=30)
+
+    def change_player_count() -> None:
+        if OPTION["PLAYER_COUNT"] == 1:
+            OPTION["PLAYER_COUNT"] += 1
+        else:
+            OPTION["PLAYER_COUNT"] -= 1
+        player_count_button.text = f"Players: {OPTION['PLAYER_COUNT']}"
+        player_count_button.text_render = \
+            player_count_button.font.render(player_count_button.text, False, player_count_button.text_color)
+        player_count_button.update_text()
+
+    player_count_button.action = change_player_count
 
     increase_score_button = Button([screen_width // 2 + 120, title_box.size[1] * 4 + 30],
                                    [40, 50],
@@ -130,8 +121,15 @@ def menu_loop(screen: pygame.Surface,
 
     # END OPTION MENU BUTTONS -----------------------------------------------------------------------------------------
 
-    main_menu_buttons = start_button, options_button, quit_button
-    option_menu_buttons = increase_score_button, decrease_score_button, back_to_main_menu_button,
+    main_menu_buttons = (start_button,
+                         options_button,
+                         quit_button)
+
+    option_menu_buttons = (player_count_button,
+                           increase_score_button,
+                           decrease_score_button,
+                           back_to_main_menu_button,)
+
     option_menu_text_boxes = current_winning_score_text_box,
 
     menu_state = MenuState.Menu

@@ -9,8 +9,9 @@ __DEFAULT_OPTION = {
     "PLAYER1_COLOR": Color.Red,
     "PLAYER2_COLOR": Color.Blue,
     "BALL_COLOR": Color.Black,
-    "NUM_OF_PLAYERS": 2,
-    "FONT_PATH": "resource/fonts/lunchds.ttf",
+    "PLAYER_COUNT": 2,
+    "FONT_PATH": "resource/fonts",
+    "MAX_BALL_SPEED": 500
 }
 
 

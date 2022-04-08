@@ -42,13 +42,13 @@ if __name__ == "__main__":
 
     from pong.game import pong_loop
     from pong.menu import menu_loop
-    from pong.common import MenuState
+    from pong.myenums import MenuState
     from pong.options import OPTION
 
     # The main loop. Contains some pygame boilerplate and also contains two loops:
     # the menu loop and the game loop.
 
-    main_loop(768, 432, "Pong", False, 75)
+    main_loop(800, 450, "Pong", False, 75)
 
     with open(os.path.basename("options.json"), "w+") as f:
         json.dump(OPTION, f)

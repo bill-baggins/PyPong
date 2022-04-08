@@ -5,6 +5,8 @@ from .paddle import Paddle
 
 from random import randint, random
 
+from .options import OPTION
+
 
 class Ball(object):
     def __init__(self, ball_radius: int, screen_width: int, screen_height: int, speed_x: int, color: tuple):
@@ -35,10 +37,13 @@ class Ball(object):
         if self.rect.colliderect(player.rect):
             self.bounce_noise.play()
             self.rect.x = player.rect.left - self.rect.width if self.speed_x > 0 else player.rect.right
-            if self.speed_x < 0:
-                self.speed_x = -self.speed_x + 10
+            if abs(self.speed_x) < OPTION["MAX_BALL_SPEED"]:
+                if self.speed_x < 0:
+                    self.speed_x = -self.speed_x + 10
+                else:
+                    self.speed_x = -(self.speed_x + 10)
             else:
-                self.speed_x = -(self.speed_x + 10)
+                self.speed_x = -self.speed_x
 
             new_speed_y = randint(2, 5) * 30
 

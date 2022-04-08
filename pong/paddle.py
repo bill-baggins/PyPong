@@ -10,7 +10,7 @@ class Paddle(object):
                  height: float,
                  color: tuple):
         self.score = 0
-        self.speed = 80
+        self.speed = 240
         self.pos = pos
         self.width = width
         self.height = height
@@ -38,17 +38,15 @@ class Player(Paddle):
         super().__init__(pos, width, height, color)
         
         self.valid_movement_inputs = valid_movement_inputs or []
-
-        if joystick is not None:
-            self.joystick = joystick
+        self.joystick = joystick
 
     def update(self, dt: float, screen_height: int):
         if self.rect.top <= 0:
-            self.rect.top = 0
+            self.rect.top = 1
         elif self.rect.bottom >= screen_height:
-            self.rect.bottom = screen_height
+            self.rect.bottom = screen_height - 1
 
-        self.rect.y += self.movement_key_dict.get(self.current_key, 0) * dt
+        self.rect.y += int(self.movement_key_dict.get(self.current_key, 0) * dt)
 
 
 class AutonomousEnemyPaddle(Paddle):

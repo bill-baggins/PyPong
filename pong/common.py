@@ -1,12 +1,7 @@
 import pygame
-import pygame.font
-import pygame.surface
+import os.path
 
-
-class GameFont:
-    Default = pygame.font.Font("resource/fonts/lunchds.ttf", 30)
-    Title = pygame.font.Font("resource/fonts/lunchds.ttf", 50)
-    Arrow = pygame.font.Font("resource/fonts/lunchds.ttf", 80)
+from typing import Union, Callable
 
 
 # Color class. Has named attributes of various colors I use often.
@@ -21,34 +16,10 @@ class Color:
     Silver = 192, 192, 192, 255
 
 
-# "Enum" that keeps track of the state of the menu.
-class MenuState:
-    val_range = range(0, 4)
-    (Menu,
-     Options,
-     Game,
-     Quit) = val_range
-
-
-# "Enum" that keeps track of the game's state.
-class GameState:
-    val_range = range(0, 5)
-    (Start,
-     PlayerGotPoint,
-     GameOver,
-     Paused,
-     Menu,) = val_range
-
-
-# "Enum" that has values for each of the buttons on an Xbox One controller.
-class XboxButton:
-    val_range = range(0, 6)
-    (A,
-     X,
-     Y,
-     B,
-     RB,
-     LB) = val_range
+class GameFont:
+    Default = pygame.font.Font("resource/fonts/lunchds.ttf", 30)
+    Title = pygame.font.Font("resource/fonts/lunchds.ttf", 50)
+    Arrow = pygame.font.Font("resource/fonts/lunchds.ttf", 80)
 
 
 class TextBox(object):
@@ -65,7 +36,8 @@ class TextBox(object):
                  text: str = "",
                  text_pos: list = None,
                  text_size: int = 20,
-                 text_color: tuple = Color.Black):
+                 text_color: tuple = Color.Black,
+                 font_family: str = None):
         from .options import OPTION
         
         self.pos = pos
@@ -76,12 +48,11 @@ class TextBox(object):
         self.text_size = text_size
         self.text_color = text_color
 
-        self.font = pygame.font.Font(OPTION["FONT_PATH"], self.text_size)
+        self.font = pygame.font.Font(os.path.join(OPTION["FONT_PATH"], font_family or "lunchds.ttf"), self.text_size)
 
         self.surf = pygame.Surface(self.size)
         self.rect = self.surf.get_rect(topleft=self.pos)
 
-        
         self.__draw_to_self(self.font)
         self.__center_text()
 
@@ -107,3 +78,31 @@ class TextBox(object):
                          (self.size[1] // 2) - self.text_render.get_rect().centery]
         self.surf.fill(self.background_color)
         self.surf.blit(self.text_render, self.text_pos)
+
+
+class Button(TextBox):
+    """
+    This is my Button class. It is another GUI object that inherits from the
+    TextBox class. The button class contains all the same attributes as the
+    TextBox class, but with one added function: on_click. When clicked, it return
+    the menu_state the button was intended to change.
+    """
+    def __init__(self,
+                 pos: list,
+                 size: list,
+                 background_color: list,
+                 action: object,
+                 text: str = "",
+                 text_size: int = 20,
+                 text_pos: list = None,
+                 text_color: tuple = Color.Black):
+
+        super().__init__(pos, size, background_color, text, text_pos, text_size, text_color)
+        self.action = action
+
+    # IMPORTANT: this function changes the MenuState. Gotta put this here
+    # so i don't confuse myself later if something breaks because of this.
+    def on_click(self, mouse_pos: tuple) -> Union[Callable, object]:
+        if (self.rect.left < mouse_pos[0] < self.rect.right and
+                self.rect.top < mouse_pos[1] < self.rect.bottom):
+            return self.action
